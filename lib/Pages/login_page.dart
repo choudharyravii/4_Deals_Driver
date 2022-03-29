@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:four_deals_app/Models/data.dart';
+import 'package:four_deals_app/Pages/dashboard.dart';
 import 'package:four_deals_app/Pages/signup_page.dart';
+import 'package:get/get.dart';
+import '../services/login.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -10,7 +13,8 @@ class Login extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<Login> {
-  get nameController => null;
+  TextEditingController userName = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +57,7 @@ class _WelcomePageState extends State<Login> {
                     style: TextStyle(
                       height: 1,
                     ),
-                    controller: nameController,
+                    controller: userName,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Enter Email Address',
@@ -75,7 +79,7 @@ class _WelcomePageState extends State<Login> {
                     style: TextStyle(
                       height: 1,
                     ),
-                    controller: nameController,
+                    controller: password,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Enter Password',
@@ -103,7 +107,12 @@ class _WelcomePageState extends State<Login> {
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  onPressed: () => {},
+                  onPressed: () async {
+                    var status = await login(userName.text, password.text);
+                    if (status == 200) {
+                      Get.offAll(DashBoardScreen());
+                    }
+                  },
                   icon: const Icon(
                     Icons.login_sharp,
                     color: Color(0xFFFFFFFF),
@@ -159,10 +168,10 @@ class _WelcomePageState extends State<Login> {
                     shape: const CircleBorder(),
                   ),
                 ],
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: Data.height * 2,
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 // ignore: prefer_const_literals_to_create_immutables
@@ -191,9 +200,9 @@ class _WelcomePageState extends State<Login> {
       ),
     );
   }
-   void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignUp()));
+
+  void _navigateToNextScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SignUp()));
   }
 }
-
-
